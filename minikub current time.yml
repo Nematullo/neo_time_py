@@ -1,0 +1,38 @@
+# Это описание Deployment — контроллера, который управляет созданием и обновлением Pod'ов
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: current-time  # Имя деплоймента
+spec:
+  replicas: 3  # Количество подов (контейнеров), которые нужно запустить
+  selector:
+    matchLabels:
+      app: current-time  # Selector указывает, какие поды он контролирует
+  template:
+    metadata:
+      labels:
+        app: current-time  # Метка для связи с сервисом
+    spec:
+      containers:
+      - name: current-time  # Имя контейнера внутри пода
+        image: neorld/current-time:latest  # Docker-образ, который будет запущен
+        ports:
+        - containerPort: 1001  # Порт, на котором приложение внутри контейнера слушает
+        imagePullPolicy: Always  # Всегда тянуть свежую версию образа (если есть)
+
+---
+
+# Это сервис Kubernetes, который открывает доступ к подам снаружи
+apiVersion: v1
+kind: Service
+metadata:
+  name: current-time-service  # Имя сервиса
+spec:
+  type: NodePort  # Тип сервиса: доступ извне через IP ноды и nodePort
+  selector:
+    app: current-time  # Привязка к подам по метке app: current-time
+  ports:
+    - protocol: TCP
+      port: 1001         # Порт сервиса (к которому можно обращаться изнутри кластера)
+      targetPort: 1001   # Порт внутри подов (контейнеров)
+      nodePort: 31001    # Фиксированный внешний порт на ноде (через него доступ извне)

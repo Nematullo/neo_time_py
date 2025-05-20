@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY current_time.py .
 
-RUN pip install flask
+RUN pip install --no-cache-dir flask pytz
 
 EXPOSE 1001
 

@@ -5,15 +5,26 @@
 
 [sources.kubernetes_logs]
 type = "file"
-include = ["/var/log/pods/*/*/current-time/*.log"]
+include = ["/var/log/current-time/*.log"]
 ignore_older = 86400
 
 [sinks.loki]
 type = "loki"
 inputs = ["kubernetes_logs"]
-endpoint = "http://host.minikube.internal:3100"
+endpoint = "http://localhost:3100"
 encoding.codec = "json"
 
 [sinks.loki.labels]
 job = "current-time"
 
+
+[sinks.console]
+type = "console"
+inputs = ["kubernetes_logs"]   # <-- было "logs", исправил на "kubernetes_logs"
+encoding.codec = "json"
+
+#[sinks.file_logs]
+#type = "file"
+#inputs = ["kubernetes_logs"]
+#path = "/var/log/current-time/vector-collected.log"
+#encoding.codec = "json"

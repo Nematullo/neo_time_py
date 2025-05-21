@@ -1,11 +1,11 @@
-# app.py
 from flask import Flask
 from datetime import datetime
 import pytz
+import logging
+import os
 
 app = Flask(__name__)
 
-# Список нужных временных зон с названиями
 timezones = {
     "Москва": "Europe/Moscow",
     "Санкт-Петербург": "Europe/Moscow",
@@ -21,6 +21,19 @@ timezones = {
     "Бразилия (Сан-Паулу)": "America/Sao_Paulo"
 }
 
+# Функция для записи лога запуска
+def log_startup():
+    log_dir = "/var/log/current-time"
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    logging.basicConfig(
+        filename=os.path.join(log_dir, "startup.log"),
+        level=logging.INFO,
+        format='%(asctime)s %(message)s',
+        encoding='utf-8'
+    )
+    logging.info("Лог Нео - время запуска приложения: %s", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
 @app.route("/")
 def current_time():
     result = "<h1>Текущее время в разных странах и регионах:</h1><ul>"
@@ -33,4 +46,5 @@ def current_time():
     return result
 
 if __name__ == "__main__":
+    log_startup()
     app.run(host="0.0.0.0", port=1001)

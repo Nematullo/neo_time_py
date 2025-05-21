@@ -1,3 +1,8 @@
+# [sources.kubernetes_logs]
+# type = "file"
+# include = ["/var/log/pods/*/*/current-time/*.log"]
+# ignore_older = 86400
+
 [sources.kubernetes_logs]
 type = "file"
 include = ["/var/log/pods/*/*/current-time/*.log"]
@@ -6,7 +11,7 @@ ignore_older = 86400
 [sinks.loki]
 type = "loki"
 inputs = ["kubernetes_logs"]
-endpoint = "http://192.168.49.1:3100"
+endpoint = "http://host.minikube.internal:3100"
 encoding.codec = "json"
 
 [sinks.loki.labels]

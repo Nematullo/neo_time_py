@@ -48,11 +48,17 @@ spec:
           mountPath: /var/log/pods
           readOnly: true
 
-      - name: node-exporter              # Sidecar контейнер для сбора метрик
+      - name: node-exporter
         image: prom/node-exporter:latest
+        args:
+        - --path.rootfs=/host/root
         ports:
-        - containerPort: 9100            # Порт node-exporter 
-     
+        - containerPort: 9100
+        volumeMounts:
+        - name: rootfs
+          mountPath: /host/root
+          readOnly: true
+
       volumes:                      # вот здесь, ровно на одном уровне с containers!
       - name: varlog
         emptyDir: {}
@@ -64,6 +70,11 @@ spec:
       - name: varlogpods
         hostPath:
           path: /var/log/pods
+          type: Directory
+
+      - name: rootfs
+        hostPath:
+          path: /
           type: Directory
 ---
 

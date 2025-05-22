@@ -28,7 +28,8 @@ storage_config:
 compactor:
   retention_enabled: true
   retention_delete_delay: 2m
-  retention_period: 1h          # удалить данные старше часа
+  retention_period: 1h          # удалить данные старше 
+  
 
 limits_config:
   retention_period: 1h           # глобально лимит хранения

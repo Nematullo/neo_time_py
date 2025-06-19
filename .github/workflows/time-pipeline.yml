@@ -51,15 +51,15 @@ jobs:
       
       - name: Build image for ECR
         run: |
-          docker build -t 724560470499.dkr.ecr.eu-north-1.amazonaws.com/current-time:latest .
+          docker build -t 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
 
       - name: Push image to ECR
         run: |
-          docker push 724560470499.dkr.ecr.eu-north-1.amazonaws.com/current-time:latest
+          docker push 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
           
       #- name: Build and Push Docker image to ECR
       #  uses: docker/build-push-action@v5
       #   with:
       #    context: .
       #    push: true
-      #    tags: 724560470499.dkr.ecr.eu-north-1.amazonaws.com/current-time:latest
+      #    tags: 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest

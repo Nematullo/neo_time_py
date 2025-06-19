@@ -79,7 +79,7 @@ jobs:
 
       - name: Run Docker Image
         run: |
-          docker run -d -p 2002:2002 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
+          docker run -d -p 1001:2002 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
 
           
       #- name: Build and Push Docker image to ECR

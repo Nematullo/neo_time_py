@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string
+from flask import Flask
 from datetime import datetime
 import pytz
 import logging
@@ -53,89 +53,17 @@ def setup_logging():
 
 @app.route("/")
 def current_time():
-    times = []
+    # Логирование запроса к сайту в stdout
+    logger.info("Сайт был запрошен/обновлен.") # Это сообщение пойдет в stdout
+
+    result = "<h1>Текущее время в разных странах и регионах:</h1><ul>"
     for name, zone in timezones.items():
         tz = pytz.timezone(zone)
         now = datetime.now(tz)
         formatted_time = now.strftime('%Y-%m-%d %H:%M:%S')
-        times.append({'name': name, 'time': formatted_time})
-
-    html = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Текущее время</title>
-        <meta charset="utf-8">
-        <style>
-            body {
-                background: #f6fff6;
-                font-family: 'Segoe UI', Arial, sans-serif;
-                color: #222;
-                margin: 0;
-                padding: 0;
-            }
-            .container {
-                max-width: 500px;
-                margin: 40px auto;
-                background: #fff;
-                border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0,128,0,0.08);
-                padding: 32px;
-            }
-            h1 {
-                color: #1a7f37;
-                text-align: center;
-                margin-bottom: 24px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                background: #eaffea;
-                border-radius: 8px;
-                overflow: hidden;
-            }
-            th, td {
-                padding: 12px 8px;
-                text-align: left;
-            }
-            th {
-                background: #1a7f37;
-                color: #fff;
-                font-weight: 600;
-            }
-            tr:nth-child(even) {
-                background: #d6f5d6;
-            }
-            tr:hover {
-                background: #b2eab2;
-            }
-        </style>
-        <script>
-            setTimeout(function() {
-                window.location.reload();
-            }, 5000); // обновлять каждые 5 секунд
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Текущее время в разных странах и регионах</h1>
-            <table>
-                <tr>
-                    <th>Регион</th>
-                    <th>Время</th>
-                </tr>
-                {% for t in times %}
-                <tr>
-                    <td>{{ t.name }}</td>
-                    <td>{{ t.time }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </body>
-    </html>
-    """
-    return render_template_string(html, times=times)
+        result += f"<li><strong>{name}</strong>: {formatted_time}</li>"
+    result += "</ul>"
+    return result
 
 if __name__ == "__main__":
     setup_logging() # Вызываем новую функцию настройки логирования

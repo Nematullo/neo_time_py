@@ -8,6 +8,8 @@ jobs:
   docker:
     runs-on: self-hosted
 
+    if: github.ref == 'refs/heads/docker'
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -44,6 +46,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+  aws-ecr:
+    runs-on: self-hosted
+    steps:
+
       - name: Login to Amazon ECR
         run: |
           aws ecr get-login-password --region eu-north-1 \
@@ -56,6 +62,15 @@ jobs:
       - name: Push image to ECR
         run: |
           docker push 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
+
+      - name: Pull Docker Image
+        run: |
+          docker pull 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
+
+      - name: Run Docker Image
+        run: |
+          docker run -d -p 2002:2002 724560470499.dkr.ecr.eu-north-1.amazonaws.com/neo/neo:latest
+
           
       #- name: Build and Push Docker image to ECR
       #  uses: docker/build-push-action@v5

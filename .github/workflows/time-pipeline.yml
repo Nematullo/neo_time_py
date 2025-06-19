@@ -35,4 +35,23 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/current-time:latest .
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/current-time:latest
           docker run -d -p 1001:1001 --name current-time-container ${{ secrets.DOCKERHUB_USERNAME }}/current-time:latest
+      
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region eu-north-1 \
+            | docker login --username AWS --password-stdin 724560470499.dkr.ecr.eu-north-1.amazonaws.com
+      
+      - name: Build image for ECR
+        run: |
+          docker build -t 724560470499.dkr.ecr.eu-north-1.amazonaws.com/current-time:latest .
 
+      - name: Push image to ECR
+        run: |
+          docker push 724560470499.dkr.ecr.eu-north-1.amazonaws.com/current-time:latest
+          
+      #- name: Build and Push Docker image to ECR
+      #  uses: docker/build-push-action@v5
+      #   with:
+      #    context: .
+      #    push: true
+      #    tags: 724560470499.dkr.ecr.eu-north-1.amazonaws.com/current-time:latest

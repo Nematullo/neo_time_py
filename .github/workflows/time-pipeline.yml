@@ -8,7 +8,7 @@ jobs:
   docker:
     runs-on: self-hosted
 
-    if: github.ref == 'refs/heads/docker'
+    #if: github.ref == 'refs/heads/docker'
     
     steps:
       - name: Checkout repo
@@ -42,6 +42,7 @@ jobs:
 
   aws-ecr:
     runs-on: self-hosted
+    if: github.ref == 'refs/heads/docker'
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
